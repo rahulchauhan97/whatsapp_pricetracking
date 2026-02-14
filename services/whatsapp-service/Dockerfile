@@ -30,7 +30,7 @@ COPY shared ./shared
 
 # Copy service files
 COPY services/whatsapp-service/package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 COPY services/whatsapp-service/src ./src
 

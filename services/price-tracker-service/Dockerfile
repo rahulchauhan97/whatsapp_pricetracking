@@ -7,7 +7,7 @@ COPY shared ./shared
 
 # Copy service files
 COPY services/price-tracker-service/package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 COPY services/price-tracker-service/src ./src
 

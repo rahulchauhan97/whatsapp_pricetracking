@@ -7,7 +7,7 @@ COPY shared ./shared
 
 # Copy service files
 COPY services/api-gateway/package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 COPY services/api-gateway/src ./src
 
