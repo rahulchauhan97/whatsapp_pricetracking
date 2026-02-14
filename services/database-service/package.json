@@ -1,0 +1,21 @@
+{
+  "name": "database-service",
+  "version": "1.0.0",
+  "description": "Centralized SQLite database service",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.2.2",
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "dd-trace": "^4.23.0",
+    "ioredis": "^5.3.2",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
