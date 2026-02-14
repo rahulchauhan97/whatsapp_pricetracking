@@ -1,4 +1,5 @@
 const initTracer = require('../../shared/tracer');
+const tracer = initTracer('scraper-service');
 
 const express = require('express');
 const puppeteer = require('puppeteer-extra');
@@ -30,7 +31,6 @@ let browser = null;
 // Initialize browser
 async function initBrowser() {
   if (!browser) {
-    const tracer = initTracer('scraper-' + 'flipkart');
     browser = await puppeteer.launch({
       headless: 'new',
       args: [

@@ -1,5 +1,5 @@
 const initTracer = require('../../shared/tracer');
-const tracer = initTracer('whatsapp-bot-core');
+const tracer = initTracer('whatsapp-service');
 
 const express = require('express');
 const config = require('../../shared/config');
