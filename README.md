@@ -1,0 +1,1 @@
+# WhatsApp Price Tracker Bot\n\nA WhatsApp bot to track prices, bank offers, and stock availability on Flipkart, Amazon, and Vivo.
