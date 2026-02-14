@@ -16,7 +16,9 @@ services:
 
   # Core Services
   database-service:
-    build: ./services/database-service
+    build:
+      context: .
+      dockerfile: services/database-service/Dockerfile
     ports:
       - "3008:3008"
     volumes:
@@ -30,7 +32,9 @@ services:
     restart: unless-stopped
 
   api-gateway:
-    build: ./services/api-gateway
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
     ports:
       - "3000:3000"
     environment:
@@ -44,7 +48,9 @@ services:
     restart: unless-stopped
 
   whatsapp-service:
-    build: ./services/whatsapp-service
+    build:
+      context: .
+      dockerfile: services/whatsapp-service/Dockerfile
     ports:
       - "3001:3001"
     volumes:
@@ -61,7 +67,9 @@ services:
     restart: unless-stopped
 
   scraper-service:
-    build: ./services/scraper-service
+    build:
+      context: .
+      dockerfile: services/scraper-service/Dockerfile
     ports:
       - "3002:3002"
     environment:
@@ -76,7 +84,9 @@ services:
     shm_size: '2gb'
 
   price-tracker-service:
-    build: ./services/price-tracker-service
+    build:
+      context: .
+      dockerfile: services/price-tracker-service/Dockerfile
     ports:
       - "3003:3003"
     environment:
@@ -91,7 +101,9 @@ services:
     restart: unless-stopped
 
   offer-monitor-service:
-    build: ./services/offer-monitor-service
+    build:
+      context: .
+      dockerfile: services/offer-monitor-service/Dockerfile
     ports:
       - "3004:3004"
     environment:
@@ -105,7 +117,9 @@ services:
     restart: unless-stopped
 
   stock-monitor-service:
-    build: ./services/stock-monitor-service
+    build:
+      context: .
+      dockerfile: services/stock-monitor-service/Dockerfile
     ports:
       - "3005:3005"
     environment:
@@ -119,7 +133,9 @@ services:
     restart: unless-stopped
 
   notification-service:
-    build: ./services/notification-service
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
     ports:
       - "3006:3006"
     environment:
@@ -131,7 +147,9 @@ services:
     restart: unless-stopped
 
   scheduler-service:
-    build: ./services/scheduler-service
+    build:
+      context: .
+      dockerfile: services/scheduler-service/Dockerfile
     ports:
       - "3007:3007"
     environment:

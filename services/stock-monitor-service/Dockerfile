@@ -2,10 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy shared modules
+COPY shared ./shared
+
+# Copy service files
+COPY services/stock-monitor-service/package*.json ./
 RUN npm ci --only=production
 
-COPY . .
+COPY services/stock-monitor-service/src ./src
 
 EXPOSE 3005
 

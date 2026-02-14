@@ -25,10 +25,14 @@ RUN apt-get update && apt-get install -y \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-COPY package*.json ./
+# Copy shared modules
+COPY shared ./shared
+
+# Copy service files
+COPY services/scraper-service/package*.json ./
 RUN npm ci --only=production
 
-COPY . .
+COPY services/scraper-service/src ./src
 
 EXPOSE 3002
 
