@@ -1,0 +1,216 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: whatsapp-tracker-redis-dev
+    ports:
+      - "6379:6379"
+    networks:
+      - tracker-network
+
+  database-service:
+    build:
+      context: .
+      dockerfile: services/database-service/Dockerfile
+    container_name: whatsapp-tracker-database-dev
+    environment:
+      - DATABASE_PORT=3008
+      - DB_PATH=/app/data/tracker.db
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/database-service/src:/app/src
+      - database-data:/app/data
+    ports:
+      - "3008:3008"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    container_name: whatsapp-tracker-api-dev
+    environment:
+      - API_GATEWAY_PORT=3000
+      - DATABASE_HOST=database-service
+      - DATABASE_PORT=3008
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/api-gateway/src:/app/src
+    ports:
+      - "3000:3000"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - database-service
+      - redis
+
+  whatsapp-service:
+    build:
+      context: .
+      dockerfile: services/whatsapp-service/Dockerfile
+    container_name: whatsapp-tracker-whatsapp-dev
+    environment:
+      - WHATSAPP_PORT=3001
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/whatsapp-service/src:/app/src
+      - whatsapp-auth:/app/.wwebjs_auth
+      - whatsapp-cache:/app/.wwebjs_cache
+    ports:
+      - "3001:3001"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+      - database-service
+
+  scraper-service:
+    build:
+      context: .
+      dockerfile: services/scraper-service/Dockerfile
+    container_name: whatsapp-tracker-scraper-dev
+    environment:
+      - SCRAPER_PORT=3002
+      - REDIS_HOST=redis
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/scraper-service/src:/app/src
+    ports:
+      - "3002:3002"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+    cap_add:
+      - SYS_ADMIN
+
+  price-tracker-service:
+    build:
+      context: .
+      dockerfile: services/price-tracker-service/Dockerfile
+    container_name: whatsapp-tracker-price-dev
+    environment:
+      - PRICE_TRACKER_PORT=3003
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/price-tracker-service/src:/app/src
+    ports:
+      - "3003:3003"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+      - database-service
+
+  offer-monitor-service:
+    build:
+      context: .
+      dockerfile: services/offer-monitor-service/Dockerfile
+    container_name: whatsapp-tracker-offers-dev
+    environment:
+      - OFFER_MONITOR_PORT=3004
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/offer-monitor-service/src:/app/src
+    ports:
+      - "3004:3004"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+      - database-service
+
+  stock-monitor-service:
+    build:
+      context: .
+      dockerfile: services/stock-monitor-service/Dockerfile
+    container_name: whatsapp-tracker-stock-dev
+    environment:
+      - STOCK_MONITOR_PORT=3005
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/stock-monitor-service/src:/app/src
+    ports:
+      - "3005:3005"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+      - database-service
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    container_name: whatsapp-tracker-notifications-dev
+    environment:
+      - NOTIFICATION_PORT=3006
+      - REDIS_HOST=redis
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/notification-service/src:/app/src
+    ports:
+      - "3006:3006"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+
+  scheduler-service:
+    build:
+      context: .
+      dockerfile: services/scheduler-service/Dockerfile
+    container_name: whatsapp-tracker-scheduler-dev
+    environment:
+      - SCHEDULER_PORT=3007
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - LOG_LEVEL=debug
+    volumes:
+      - ./shared:/app/shared
+      - ./services/scheduler-service/src:/app/src
+    ports:
+      - "3007:3007"
+    networks:
+      - tracker-network
+    command: npx nodemon --watch src --watch /app/shared src/index.js
+    depends_on:
+      - redis
+      - database-service
+
+networks:
+  tracker-network:
+    driver: bridge
+
+volumes:
+  database-data:
+  whatsapp-auth:
+  whatsapp-cache:
