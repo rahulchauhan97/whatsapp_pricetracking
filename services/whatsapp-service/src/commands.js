@@ -271,10 +271,20 @@ class CommandHandler {
   }
 
   detectPlatform(url) {
-    if (url.includes('flipkart.com')) return 'flipkart';
-    if (url.includes('amazon.in') || url.includes('amazon.com')) return 'amazon';
-    if (url.includes('vivo.com')) return 'vivo';
-    return null;
+    try {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname.toLowerCase();
+      
+      // Check for exact match or subdomain match with leading dot
+      if (hostname === 'flipkart.com' || hostname === 'www.flipkart.com') return 'flipkart';
+      if (hostname === 'amazon.in' || hostname === 'www.amazon.in' ||
+          hostname === 'amazon.com' || hostname === 'www.amazon.com') return 'amazon';
+      if (hostname === 'vivo.com' || hostname === 'www.vivo.com') return 'vivo';
+      
+      return null;
+    } catch (error) {
+      return null;
+    }
   }
 }
 
