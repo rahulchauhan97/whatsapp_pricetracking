@@ -9,7 +9,7 @@ COPY shared ./shared
 
 # Copy service files
 COPY services/database-service/package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 COPY services/database-service/src ./src
 

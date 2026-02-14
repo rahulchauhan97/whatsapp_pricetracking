@@ -30,7 +30,7 @@ COPY shared ./shared
 
 # Copy service files
 COPY services/scraper-service/package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 COPY services/scraper-service/src ./src
 
