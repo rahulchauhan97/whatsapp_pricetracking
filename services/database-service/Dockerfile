@@ -13,6 +13,9 @@ RUN npm install --omit=dev
 
 COPY services/database-service/src ./src
 
+# Create symlink at /shared to resolve ../../shared from service code
+RUN ln -s /app/shared /shared
+
 RUN mkdir -p /app/data
 
 EXPOSE 3008

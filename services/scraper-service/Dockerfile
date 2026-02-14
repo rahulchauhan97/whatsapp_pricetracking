@@ -34,6 +34,9 @@ RUN npm install --omit=dev
 
 COPY services/scraper-service/src ./src
 
+# Create symlink at /shared to resolve ../../shared from service code
+RUN ln -s /app/shared /shared
+
 EXPOSE 3002
 
 CMD ["node", "src/index.js"]

@@ -11,6 +11,9 @@ RUN npm install --omit=dev
 
 COPY services/scheduler-service/src ./src
 
+# Create symlink at /shared to resolve ../../shared from service code
+RUN ln -s /app/shared /shared
+
 EXPOSE 3007
 
 CMD ["node", "src/index.js"]
