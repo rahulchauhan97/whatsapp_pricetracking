@@ -1,0 +1,170 @@
+version: '3.8'
+
+services:
+  # Infrastructure
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Core Services
+  database-service:
+    build:
+      context: .
+      dockerfile: services/database-service/Dockerfile
+    ports:
+      - "3008:3008"
+    volumes:
+      - db-data:/app/data
+    environment:
+      - DATABASE_PORT=3008
+      - REDIS_HOST=redis
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - API_GATEWAY_PORT=3000
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+
+  whatsapp-service:
+    build:
+      context: .
+      dockerfile: services/whatsapp-service/Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - whatsapp-auth:/app/.wwebjs_auth
+      - whatsapp-cache:/app/.wwebjs_cache
+    environment:
+      - WHATSAPP_PORT=3001
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+
+  scraper-service:
+    build:
+      context: .
+      dockerfile: services/scraper-service/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - SCRAPER_PORT=3002
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+    shm_size: '2gb'
+
+  price-tracker-service:
+    build:
+      context: .
+      dockerfile: services/price-tracker-service/Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - PRICE_TRACKER_PORT=3003
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - PRICE_THRESHOLD=1.0
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+
+  offer-monitor-service:
+    build:
+      context: .
+      dockerfile: services/offer-monitor-service/Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - OFFER_MONITOR_PORT=3004
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+
+  stock-monitor-service:
+    build:
+      context: .
+      dockerfile: services/stock-monitor-service/Dockerfile
+    ports:
+      - "3005:3005"
+    environment:
+      - STOCK_MONITOR_PORT=3005
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    ports:
+      - "3006:3006"
+    environment:
+      - NOTIFICATION_PORT=3006
+      - REDIS_HOST=redis
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  scheduler-service:
+    build:
+      context: .
+      dockerfile: services/scheduler-service/Dockerfile
+    ports:
+      - "3007:3007"
+    environment:
+      - SCHEDULER_PORT=3007
+      - REDIS_HOST=redis
+      - DATABASE_HOST=database-service
+      - CRON_PATTERN=*/30 * * * *
+      - DD_ENABLED=false
+    depends_on:
+      - redis
+      - database-service
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  db-data:
+  whatsapp-auth:
+  whatsapp-cache:
