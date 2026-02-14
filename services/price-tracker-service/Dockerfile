@@ -11,6 +11,9 @@ RUN npm install --omit=dev
 
 COPY services/price-tracker-service/src ./src
 
+# Create symlink at /shared to resolve ../../shared from service code
+RUN ln -s /app/shared /shared
+
 EXPOSE 3003
 
 CMD ["node", "src/index.js"]

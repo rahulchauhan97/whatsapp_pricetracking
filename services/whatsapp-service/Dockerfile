@@ -34,6 +34,9 @@ RUN npm install --omit=dev
 
 COPY services/whatsapp-service/src ./src
 
+# Create symlink at /shared to resolve ../../shared from /app/src/index.js
+RUN ln -s /app/shared /shared
+
 RUN mkdir -p /app/.wwebjs_auth /app/.wwebjs_cache
 
 EXPOSE 3001
