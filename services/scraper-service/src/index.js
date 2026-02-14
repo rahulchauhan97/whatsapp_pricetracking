@@ -1,12 +1,12 @@
-const initTracer = require('../../shared/tracer');
+const initTracer = require('../shared/tracer');
 const tracer = initTracer('scraper-service');
 
 const express = require('express');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-const config = require('../../shared/config');
-const createLogger = require('../../shared/logger');
-const RedisClient = require('../../shared/redis');
+const config = require('../shared/config');
+const createLogger = require('../shared/logger');
+const RedisClient = require('../shared/redis');
 const FlipkartScraper = require('./scrapers/flipkart');
 const AmazonScraper = require('./scrapers/amazon');
 const VivoScraper = require('./scrapers/vivo');

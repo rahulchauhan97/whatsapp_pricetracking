@@ -1,10 +1,10 @@
-const initTracer = require('../../shared/tracer');
+const initTracer = require('../shared/tracer');
 const tracer = initTracer('database-service');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../../shared/config');
-const createLogger = require('../../shared/logger');
+const config = require('../shared/config');
+const createLogger = require('../shared/logger');
 const DatabaseManager = require('./database');
 
 const logger = createLogger('database-service');
