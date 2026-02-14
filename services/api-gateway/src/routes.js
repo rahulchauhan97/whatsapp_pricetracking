@@ -1,5 +1,5 @@
 const axios = require('axios');
-const config = require('../shared/config');
+const config = require('../../shared/config');
 
 const dbUrl = `http://${config.services.database.host}:${config.services.database.port}`;
 

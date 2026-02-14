@@ -1,11 +1,11 @@
-const initTracer = require('../shared/tracer');
+const initTracer = require('../../shared/tracer');
 const tracer = initTracer('stock-monitor');
 
 const express = require('express');
 const axios = require('axios');
-const config = require('../shared/config');
-const createLogger = require('../shared/logger');
-const RedisClient = require('../shared/redis');
+const config = require('../../shared/config');
+const createLogger = require('../../shared/logger');
+const RedisClient = require('../../shared/redis');
 
 const logger = createLogger('stock-monitor-service');
 const redis = new RedisClient(logger).connect();

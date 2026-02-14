@@ -1,12 +1,12 @@
-const initTracer = require('../shared/tracer');
+const initTracer = require('../../shared/tracer');
 const tracer = initTracer('scheduler-service');
 
 const express = require('express');
 const cron = require('node-cron');
 const axios = require('axios');
-const config = require('../shared/config');
-const createLogger = require('../shared/logger');
-const RedisClient = require('../shared/redis');
+const config = require('../../shared/config');
+const createLogger = require('../../shared/logger');
+const RedisClient = require('../../shared/redis');
 
 const logger = createLogger('scheduler-service');
 const redis = new RedisClient(logger).connect();

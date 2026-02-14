@@ -1,10 +1,10 @@
-const initTracer = require('../shared/tracer');
+const initTracer = require('../../shared/tracer');
 const tracer = initTracer('api-gateway');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../shared/config');
-const createLogger = require('../shared/logger');
+const config = require('../../shared/config');
+const createLogger = require('../../shared/logger');
 const createRoutes = require('./routes');
 
 const logger = createLogger('api-gateway');

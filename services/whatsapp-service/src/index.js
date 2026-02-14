@@ -1,10 +1,10 @@
-const initTracer = require('../shared/tracer');
+const initTracer = require('../../shared/tracer');
 const tracer = initTracer('whatsapp-service');
 
 const express = require('express');
-const config = require('../shared/config');
-const createLogger = require('../shared/logger');
-const RedisClient = require('../shared/redis');
+const config = require('../../shared/config');
+const createLogger = require('../../shared/logger');
+const RedisClient = require('../../shared/redis');
 const WhatsAppBot = require('./bot');
 const CommandHandler = require('./commands');
 
